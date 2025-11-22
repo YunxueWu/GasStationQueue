@@ -145,7 +145,7 @@ plot_simulation <- function(simulation_results, type = "both") {
   if (type == "utilization" || type == "both") {
     p2 <- ggplot2::ggplot(
       data = util_data, 
-      mapping = ggplot2::aes(x = Time, y = Utilization)  
+      mapping = ggplot2::aes(x = Time, y = Utilization, group = 1)  
     ) +
       ggplot2::geom_line(color = "firebrick") +
       ggplot2::labs(title = "Pump Utilization", y = "Utilization (%)", x = "Time")

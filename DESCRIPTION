@@ -3,15 +3,15 @@ Type: Package
 Title: Gas Station Queuing Simulation Using Monte Carlo Methods
 Version: 0.1.0
 Authors@R: 
-    person("Yunxue", "Wu", email = "your_email@university.edu", 
+    person("Yunxue", "Wu", email = "sherrywuyx@outlook.com", 
            role = c("aut", "cre"))
 Description: A package for simulating gas station queueing systems using
     Monte Carlo methods. Implements discrete-event simulation to analyze
     waiting times, queue lengths, pump utilization, and system performance
     under various operational scenarios.
 License: MIT + file LICENSE
-URL: https://github.com/yourusername/GasStationQueue
-BugReports: https://github.com/yourusername/GasStationQueue/issues
+URL: https://github.com/YunxueWu/GasStationQueue
+BugReports: https://github.com/YunxueWu/GasStationQueue/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
