@@ -1,5 +1,5 @@
 test_that("performance metrics functions work correctly", {
-  # 创建测试数据
+  # Create test data
   test_results <- list(
     waiting_times = c(1.5, 2.3, 0.8, 3.1),
     queue_lengths = c(1, 2, 1, 0, 1),
@@ -10,24 +10,24 @@ test_that("performance metrics functions work correctly", {
   )
   class(test_results) <- "gas_station_simulation"
   
-  # 测试平均等待时间
+  # Test average waiting time
   avg_wait <- get_avg_waiting_time(test_results)
   expect_type(avg_wait, "double")
   expect_equal(avg_wait, mean(c(1.5, 2.3, 0.8, 3.1)))
   
-  # 测试平均队列长度
+  # Test average queue length
   avg_queue <- get_avg_queue_length(test_results)
   expect_type(avg_queue, "double")
   expect_equal(avg_queue, mean(c(1, 2, 1, 0, 1)))
   
-  # 测试油泵利用率
+  # Test pump utilization
   utilization <- get_pump_utilization(test_results)
   expect_type(utilization, "double")
   expect_equal(utilization, mean(c(0.6, 0.7, 0.8, 0.5)))
 })
 
 test_that("metrics handle empty inputs", {
-  # 测试无顾客的情况
+  # Test empty inputs (no customers)
   empty_results <- list(
     waiting_times = numeric(0),
     queue_lengths = c(0, 0, 0),
