@@ -1,0 +1,28 @@
+Package: GasStationQueue
+Type: Package
+Title: Gas Station Queuing Simulation Using Monte Carlo Methods
+Version: 0.1.0
+Authors@R: 
+    person("Yunxue", "Wu", email = "your_email@university.edu", 
+           role = c("aut", "cre"))
+Description: A package for simulating gas station queueing systems using
+    Monte Carlo methods. Implements discrete-event simulation to analyze
+    waiting times, queue lengths, pump utilization, and system performance
+    under various operational scenarios.
+License: MIT + file LICENSE
+URL: https://github.com/yourusername/GasStationQueue
+BugReports: https://github.com/yourusername/GasStationQueue/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Depends: R (>= 4.1.0) 
+Imports: 
+    ggplot2,
+    gridExtra,
+    stats

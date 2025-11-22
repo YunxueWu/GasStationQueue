@@ -1,0 +1,133 @@
+---
+title: "Gas Station Queueing Simulation Guide"
+author: "Yunxue Wu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Gas Station Queueing Simulation Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Gas Station Queueing Simulation
+
+## Installation
+```{r, eval=FALSE}
+# Install the package locally
+devtools::install_local(".")
+```
+## Basic Usage
+
+```{r, message=FALSE}
+
+# Load the package
+library(GasStationQueue)
+
+# Basic simulation with reproducible results
+set.seed(123)
+results <- simulate_gas_station(
+  arrival_rate = 8,  # 8 vehicles per hour
+  service_rate = 8,   # 8 vehicles per hour per pump
+  n_pumps = 3,
+  sim_time = 480,     # 8 hours in minutes
+  random_seed = 123
+)
+
+# View key performance metrics
+cat("Average Waiting Time:", round(get_avg_waiting_time(results), 2), "minutes\n")
+cat("Average Queue Length:", round(get_avg_queue_length(results), 2), "vehicles\n")
+cat("Pump Utilization:", round(get_pump_utilization(results) * 100, 1), "%\n")
+cat("Total Customers Served:", results$total_customers, "\n")
+
+```
+
+## Scenario Analysis
+
+```{r}
+# Compare different operational scenarios
+scenario_low <- simulate_gas_station(arrival_rate = 4, service_rate = 8, n_pumps = 2, random_seed = 123)
+scenario_medium <- simulate_gas_station(arrival_rate = 8, service_rate = 8, n_pumps = 3, random_seed = 123) 
+scenario_high <- simulate_gas_station(arrival_rate = 12, service_rate = 8, n_pumps = 4, random_seed = 123)
+
+# Create comparison table
+comparison <- data.frame(
+  Scenario = c("Low Traffic (2 pumps)", "Medium Traffic (3 pumps)", "High Traffic (4 pumps)"),
+  Waiting_Time = c(
+    get_avg_waiting_time(scenario_low),
+    get_avg_waiting_time(scenario_medium), 
+    get_avg_waiting_time(scenario_high)
+  ),
+  Queue_Length = c(
+    get_avg_queue_length(scenario_low),
+    get_avg_queue_length(scenario_medium),
+    get_avg_queue_length(scenario_high)
+  ),
+  Utilization = c(
+    get_pump_utilization(scenario_low) * 100,
+    get_pump_utilization(scenario_medium) * 100,
+    get_pump_utilization(scenario_high) * 100
+  )
+)
+
+knitr::kable(comparison, digits = 2, caption = "Scenario Comparison Analysis")
+
+
+
+```
+
+## Visualization
+
+```{r, fig.width=7, fig.height=6}
+# Create comprehensive visualization
+plot_simulation(results, "both")
+```
+
+## Advanced Analysis: Idle Time Analysis
+
+```{r}
+# Custom function for idle time analysis (following instructor's suggestion)
+analyze_system_performance <- function(simulation_results) {
+  utilization <- simulation_results$pump_utilization
+  
+  # Idle time analysis
+  idle_prob <- mean(utilization == 0)
+  busy_periods <- rle(utilization > 0.1)
+  
+  # Queueing theory metrics
+  arrival_rate <- simulation_results$parameters$arrival_rate
+  service_rate <- simulation_results$parameters$service_rate
+  n_pumps <- simulation_results$parameters$n_pumps
+  
+  traffic_intensity <- arrival_rate / (n_pumps * service_rate)
+  
+  return(list(
+    idle_probability = idle_prob,
+    avg_busy_period = ifelse(length(busy_periods$lengths[busy_periods$values == TRUE]) > 0, 
+                         mean(busy_periods$lengths[busy_periods$values == TRUE]), 
+                         0),
+    traffic_intensity = traffic_intensity,
+    system_stable = traffic_intensity < 1
+  ))
+}
+
+# Perform advanced analysis
+advanced_analysis <- analyze_system_performance(results)
+cat("System Idle Probability:", round(advanced_analysis$idle_probability * 100, 1), "%\n")
+cat("Average Busy Period Duration:", round(advanced_analysis$avg_busy_period / 60, 1), "minutes\n")
+cat("Traffic Intensity:", round(advanced_analysis$traffic_intensity, 2), "\n")
+cat("System Stable:", advanced_analysis$system_stable, "\n")
+```
+
+
+## Conclusion
+
+This package provides a flexible framework for analyzing gas station queueing systems using Monte Carlo simulation. The tool can be used for capacity planning, operational optimization, and educational purposes in queueing theory.
+
+Key features include:
+- Discrete-event simulation of gas station operations
+- Comprehensive performance metrics (waiting times, queue lengths, utilization)
+- Idle time analysis and traffic intensity calculations  
+- Scenario comparison for different operational configurations
+- Visualization tools for queue dynamics and pump utilization
+
+Future extensions could include time-varying arrival rates, multiple vehicle types, and integration with optimization algorithms for capacity planning.
