@@ -5,7 +5,7 @@ R package for gas station queueing simulation using Monte Carlo methods.
 ## Installation
 
 ```r
-devtools::install_github("yourusername/GasStationQueue")
+devtools::install_github("YunxueWu/GasStationQueue")
 ```
 ## Quick Example
 ```r
@@ -70,6 +70,7 @@ scenarios <- list(
 simulate_gas_station(arrival_rate = -1)   # Throws error
 simulate_gas_station(n_pumps = 2.5)       # Throws error
 ```
+
 
 
 For detailed examples: `vignette("gas_station_simulation")`
