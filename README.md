@@ -9,31 +9,42 @@ devtools::install_github("YunxueWu/GasStationQueue")
 ```
 ## Quick Example
 ```r
-library(GasStationQueue)
-# Run simulation
+library(GasStationQueue) 
 results <- simulate_gas_station(
-  arrival_rate = 8,
-  service_rate = 8, 
-  n_pumps = 3,
-  sim_time = 480
+  arrival_rate = 8,    # vehicles/hour (automatically converted to minutes)
+  service_rate = 8,    # vehicles/hour/pump (automatically converted)
+  n_pumps = 3,         
+  sim_time = 480       # simulation time in minutes
 )
 # Key metrics
-get_avg_waiting_time(results)    # Returns average waiting time
-get_avg_queue_length(results)    # Returns average queue length
-get_pump_utilization(results)    # Returns utilization rate (0-1)
+get_avg_waiting_time(results)    # Average waiting time (minutes)
+get_avg_queue_length(results)    # Average queue length (vehicles)
+get_pump_utilization(results)    # Utilization rate (0-1)
 
 # Visualization
 plot_simulation(results, "both")
 
 ```
+## Advanced Analysis
+```r
+# System performance analysis
+performance <- analyze_system_performance(results)
+
+# Access specific metrics
+performance$idle_probability     # System idle probability
+performance$traffic_intensity    # ρ = λ/(cμ)
+performance$system_stable        # Stability check
+performance$avg_busy_period      # Average busy period duration
+```
+
 ## Main Functions
 ```r
 
 # Core simulation function
 results <- simulate_gas_station(
-  arrival_rate = 8,    # vehicles per hour
-  service_rate = 6,    # vehicles per hour per pump
-  n_pumps = 3,         # number of pumps
+  arrival_rate = 8,    # vehicles/hour (automatically converted to minutes)
+  service_rate = 6,    # vehicles/hour/pump (automatically converted)
+  n_pumps = 3,         
   sim_time = 480       # simulation time in minutes
 )
 
@@ -70,7 +81,6 @@ scenarios <- list(
 simulate_gas_station(arrival_rate = -1)   # Throws error
 simulate_gas_station(n_pumps = 2.5)       # Throws error
 ```
-
 
 
 For detailed examples: `vignette("gas_station_simulation")`
