@@ -18,10 +18,11 @@ devtools::install_local(".")
 ```
 ## Basic Usage
 
-```{r, message=FALSE}
-
-# Load the package
+```{r, message=FALSE, warning=FALSE}
+# Load the package and required libraries
 library(GasStationQueue)
+library(ggplot2)
+library(gridExtra)
 
 # Basic simulation with reproducible results
 set.seed(123)
@@ -43,7 +44,7 @@ cat("Total Customers Served:", results$total_customers, "\n")
 
 ## Scenario Analysis
 
-```{r}
+```{r, warning=FALSE}
 # Compare different operational scenarios
 scenario_low <- simulate_gas_station(arrival_rate = 4, service_rate = 8, n_pumps = 2, random_seed = 123)
 scenario_medium <- simulate_gas_station(arrival_rate = 8, service_rate = 8, n_pumps = 3, random_seed = 123) 
@@ -79,38 +80,15 @@ knitr::kable(comparison, digits = 2, caption = "Scenario Comparison Analysis")
 
 ```{r, fig.width=7, fig.height=6}
 # Create comprehensive visualization
+# Note: Time axis now shows actual simulation minutes (0-480)
 plot_simulation(results, "both")
 ```
 
 ## Advanced Analysis: Idle Time Analysis
 
-```{r}
-# Custom function for idle time analysis (following instructor's suggestion)
-analyze_system_performance <- function(simulation_results) {
-  utilization <- simulation_results$pump_utilization
-  
-  # Idle time analysis
-  idle_prob <- mean(utilization == 0)
-  busy_periods <- rle(utilization > 0.1)
-  
-  # Queueing theory metrics
-  arrival_rate <- simulation_results$parameters$arrival_rate
-  service_rate <- simulation_results$parameters$service_rate
-  n_pumps <- simulation_results$parameters$n_pumps
-  
-  traffic_intensity <- arrival_rate / (n_pumps * service_rate)
-  
-  return(list(
-    idle_probability = idle_prob,
-    avg_busy_period = ifelse(length(busy_periods$lengths[busy_periods$values == TRUE]) > 0, 
-                         mean(busy_periods$lengths[busy_periods$values == TRUE]), 
-                         0),
-    traffic_intensity = traffic_intensity,
-    system_stable = traffic_intensity < 1
-  ))
-}
+```{r, warning=FALSE}
 
-# Perform advanced analysis
+# Perform advanced analysis using the package function
 advanced_analysis <- analyze_system_performance(results)
 cat("System Idle Probability:", round(advanced_analysis$idle_probability * 100, 1), "%\n")
 cat("Average Busy Period Duration:", round(advanced_analysis$avg_busy_period / 60, 1), "minutes\n")
